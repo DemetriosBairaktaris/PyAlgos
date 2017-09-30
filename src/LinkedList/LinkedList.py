@@ -45,7 +45,7 @@ class LinkedList:
         while  currentNode!= None:
             l.append(currentNode.getValue())
             currentNode = currentNode.getNext()
-            
+
         return str(l)
 
     def pop(self):
@@ -90,20 +90,34 @@ class LinkedList:
         previousNode.setNext(currentNode.getNext())
         self.length -= 1
 
+    def reverseIter(self):
+        prevNode = None
+        currentNode = self.root
+        while currentNode != None:
+            nextNode = currentNode.getNext()
+            currentNode.setNext(prevNode)
+            prevNode = currentNode
+            currentNode = nextNode
+        self.root = prevNode
+
+    def reverseRec(self ,prevNode = None, currentNode=None, nextNode = None):
+        if currentNode is None:
+            self.root = prevNode
+        else:
+            nextNode = currentNode.getNext()
+            currentNode.setNext(prevNode)
+            prevNode = currentNode
+            currentNode = nextNode
+            self.reverseRec(prevNode, currentNode, nextNode)
 
 def main():
     l = LinkedList()
-    for i in range(30):
+    for i in range(40):
         l + i
     print l
-    for i in range(30):
-        l.pop()
-        print l
-    for i in range(30):
-        l+i
-    for i in range(30):
-        l.removeIndex(-1)
-        print l
+    l.reverseRec(currentNode=l.root)
+    print l
+
 
 if __name__ == '__main__':
     main()
