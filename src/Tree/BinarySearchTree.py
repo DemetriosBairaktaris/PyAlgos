@@ -1,7 +1,8 @@
+from math import sin
+
 
 class Node:
-
-    def __init__(self,value = None):
+    def __init__(self, value=None):
         self.value = value
         self.left = None
         self.right = None
@@ -15,28 +16,26 @@ class Node:
     def getValue(self):
         return self.value
 
-    def setValue(self,value):
+    def setValue(self, value):
         self.value = value
 
-    def setRight(self,right):
+    def setRight(self, right):
         self.right = right
 
     def setLeft(self, left):
         self.left = left
 
 
-
-
 class BinarySearchTree:
     def __init__(self):
         self.root = None
 
-    def add(self,value):
+    def add(self, value):
         if self.root is None:
             self.root = Node(value)
         else:
             currentNode = self.root
-            next = 0
+
             while 1:
                 if currentNode.getValue() > value:
                     if currentNode.getLeft() is None:
@@ -51,25 +50,30 @@ class BinarySearchTree:
                     else:
                         currentNode = currentNode.getRight()
 
-    def traverse(self, node = None):
+    def traverseInOrder(self, node=None, l=[]):
         if node is None:
             return
-        else:
-            self.traverse(node.getLeft())
-            print node.getValue()
-            self.traverse(node.getRight())
 
+        if node.getLeft() is not None:
+            l.append(self.traverseInOrder(node.getLeft(), l))
 
-    def values(self):
-        self.traverse(self.root)
+        l.append(node.getValue())
+
+        if node.getRight() is not None:
+            l.append(self.traverseInOrder(node.getRight(), l))
+
+    def __str__(self):
+        l = []
+        self.traverseInOrder(self.root, l)
+        return str([x for x in l if x is not None])
 
 
 def main():
+
     b = BinarySearchTree()
-    b.add(4)
-    b.add(2)
-    b.add(32)
-    b.values()
+    for i in range(200):
+        b.add(sin(i))
+    print b
 
 
 if __name__ == '__main__':
