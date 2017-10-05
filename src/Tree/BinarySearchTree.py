@@ -1,79 +1,106 @@
-from math import sin
-
+from random import randrange as randomNumberFromRange
 
 class Node:
+
     def __init__(self, value=None):
+
         self.value = value
         self.left = None
         self.right = None
 
     def getRight(self):
+
         return self.right
 
     def getLeft(self):
+
         return self.left
 
     def getValue(self):
+
         return self.value
 
     def setValue(self, value):
+
         self.value = value
 
     def setRight(self, right):
+
         self.right = right
 
     def setLeft(self, left):
+
         self.left = left
 
 
 class BinarySearchTree:
     def __init__(self):
+
         self.root = None
 
-    def add(self, value):
-        if self.root is None:
-            self.root = Node(value)
-        else:
-            currentNode = self.root
+    def emptyTree(self):
 
-            while 1:
-                if currentNode.getValue() > value:
-                    if currentNode.getLeft() is None:
-                        currentNode.setLeft(Node(value))
-                        break
-                    else:
-                        currentNode = currentNode.getLeft()
-                elif currentNode.getValue() < value:
-                    if currentNode.getRight() is None:
-                        currentNode.setRight(Node(value))
-                        break
-                    else:
-                        currentNode = currentNode.getRight()
+        self._setRoot(None)
 
-    def traverseInOrder(self, node=None, l=[]):
+    def _setRoot(self, valueToBeSet):
+
+        self.root = valueToBeSet
+
+    def pushValue(self, valueToBePushed):
+
+        currentNode = self.root
+        setNode = None
+
+        if currentNode is None:
+            setNode = self._setRoot
+
+        while currentNode is not None:
+            if currentNode.getValue() > valueToBePushed:
+                setNode = currentNode.setLeft
+                currentNode = currentNode.getLeft()
+
+            elif currentNode.getValue() < valueToBePushed:
+                setNode = currentNode.setRight
+                currentNode = currentNode.getRight()
+            else:
+                return   #value is already in the tree
+
+        newNode = Node(valueToBePushed)
+        setNode(newNode)
+
+    def traverseInOrderAndCollect(self, node=None, nodeList=[]):
+
         if node is None:
             return
 
         if node.getLeft() is not None:
-            l.append(self.traverseInOrder(node.getLeft(), l))
+            nodeList.append(self.traverseInOrderAndCollect(node.getLeft(), nodeList))
 
-        l.append(node.getValue())
+        nodeList.append(node.getValue())
 
         if node.getRight() is not None:
-            l.append(self.traverseInOrder(node.getRight(), l))
+            nodeList.append(self.traverseInOrderAndCollect(node.getRight(), nodeList))
+
+    def _removeNoneTypes(self, listToOperateOn):
+
+        return [node for node in listToOperateOn if node is not None]
 
     def __str__(self):
-        l = []
-        self.traverseInOrder(self.root, l)
-        return str([x for x in l if x is not None])
+        nodeList = []
+        self.traverseInOrderAndCollect(self.root, nodeList)
+        nodeList = self._removeNoneTypes(nodeList)
+        return str(nodeList)
 
 
 def main():
 
-    b = BinarySearchTree()
-    for i in range(200):
-        b.add(sin(i))
-    print b
+    tree = BinarySearchTree()
+    for i in range(2000):
+        tree.pushValue(randomNumberFromRange(20000))
+    print tree
+
+    tree.emptyTree()
+    print tree
 
 
 if __name__ == '__main__':

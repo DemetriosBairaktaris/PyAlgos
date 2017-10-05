@@ -1,13 +1,13 @@
-#Python 2.7
-'''
+# Python 2.7
+"""
 Author: Demetrios Bairaktaris
 Description: Implementation of a Heap in Python
-'''
+"""
 
 import random
 
-class Heap:
 
+class Heap:
     def __init__(self):
         self.underLyingArray = []
         self.isMaxHeap = True
@@ -27,10 +27,10 @@ class Heap:
     def heapify(self):
         l = list(range(len(self.underLyingArray) / 2))
         l.reverse()
-        for n in (l):
+        for n in l:
             self.sinkDown(n)
 
-    def mustExchange(self,child,parent):
+    def mustExchange(self, child, parent):
         if child > parent and self.isMaxHeap:
             return True
         elif child < parent and not self.isMaxHeap:
@@ -38,8 +38,8 @@ class Heap:
         else:
             return False
 
-    def compareChildren(self,left,right):
-        if right == None:
+    def compareChildren(self, left, right):
+        if right is None:
             return 1
         if self.isMaxHeap:
             if left > right:
@@ -53,13 +53,13 @@ class Heap:
                 return 2
 
     def floatUp(self, i=None):
-        if i == None:
+        if i is None:
             i = len(self.underLyingArray) - 1
 
         node = self.underLyingArray[i]
-        parent = self.underLyingArray[( i - 1) / 2]
+        parent = self.underLyingArray[(i - 1) / 2]
 
-        while(self.mustExchange(node,parent)):
+        while self.mustExchange(node, parent):
             self.underLyingArray[i] = parent
             self.underLyingArray[(i - 1) / 2] = node
             i = (i - 1) / 2
@@ -69,7 +69,7 @@ class Heap:
                 node = self.underLyingArray[i]
                 parent = self.underLyingArray[(i - 1) / 2]
 
-    def sinkDown(self,n):
+    def sinkDown(self, n):
         while 1:
             if (2 * n + 1) >= len(self.underLyingArray):
                 break
@@ -81,10 +81,10 @@ class Heap:
             if (2 * n + 2) < len(self.underLyingArray):
                 childRight = self.underLyingArray[2 * n + 2]
 
-            childNumber = self.compareChildren(childLeft,childRight)
+            childNumber = self.compareChildren(childLeft, childRight)
             childToSwap = self.underLyingArray[2 * n + childNumber]
 
-            if(self.mustExchange(childToSwap,parentNode)):
+            if self.mustExchange(childToSwap, parentNode):
                 placeholder = self.underLyingArray[n]
                 self.underLyingArray[n] = self.underLyingArray[2 * n + childNumber]
                 self.underLyingArray[2 * n + childNumber] = placeholder
@@ -93,7 +93,7 @@ class Heap:
                 break
 
     def pop(self):
-        root, leaf = self.underLyingArray[0],self.underLyingArray[-1]
+        root, leaf = self.underLyingArray[0], self.underLyingArray[-1]
         self.underLyingArray[0] = leaf
         self.underLyingArray[-1] = root
         self.underLyingArray.pop(-1)
@@ -101,8 +101,9 @@ class Heap:
         l.reverse()
         self.sinkDown(0)
 
+
 def main():
-    unorderedList =[]
+    unorderedList = []
     for i in range(10):
         unorderedList.append(random.randrange(30))
     h = Heap()
@@ -113,6 +114,7 @@ def main():
     h + 3
     h + 1000
     print h.underLyingArray
+
 
 if __name__ == '__main__':
     main()
