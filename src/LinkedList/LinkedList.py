@@ -42,34 +42,42 @@ class LinkedList:
         currentNode = self.root
         l = []
 
-        while  currentNode!= None:
+        while currentNode is not None:
             l.append(currentNode.getValue())
             currentNode = currentNode.getNext()
 
         return str(l)
 
+    def __contains__(self, item):
+        return self.indexOf(item) is not -1
+
     def pop(self):
         self.root = self.root.next
         self.length -= 1
 
-    def removeValue(self,value):
-        previousNode = None
+    def indexOf(self,value):
+        index = -1
+        counter = 0
         currentNode = self.root
-        while currentNode != None:
+        while currentNode is not None:
             if currentNode.getValue() == value:
-                if previousNode == None:
-                    self.pop()
-                else:
-                    previousNode.setNext(currentNode.getNext())
-
-                self.length -= 1
+                index = counter
                 break
             else:
-                placeHolder = currentNode
+                counter +=1
                 currentNode = currentNode.getNext()
-                previousNode = placeHolder
+
+        return index
+
+    def removeValue(self,value):
+
+        index = self.indexOf(value)
+        self.removeIndex(index)
+        #removeIndex decrements the self.length for us...
+        #don't need to do it here
 
     def removeIndex(self,index):
+
         if(index >= self.length or index < -self.length):
             return
         index = index % self.length
@@ -91,9 +99,10 @@ class LinkedList:
         self.length -= 1
 
     def reverseIter(self):
+
         prevNode = None
         currentNode = self.root
-        while currentNode != None:
+        while currentNode is not None:
             nextNode = currentNode.getNext()
             currentNode.setNext(prevNode)
             prevNode = currentNode
@@ -101,6 +110,7 @@ class LinkedList:
         self.root = prevNode
 
     def reverseRec(self ,prevNode = None, currentNode=None, nextNode = None):
+
         if currentNode is None:
             self.root = prevNode
         else:
@@ -111,12 +121,16 @@ class LinkedList:
             self.reverseRec(prevNode, currentNode, nextNode)
 
 def main():
+
     l = LinkedList()
-    for i in range(40):
+    for i in range(4):
         l + i
     print l
     l.reverseRec(currentNode=l.root)
     print l
+    l.removeValue(36)
+    l.removeIndex(20)
+    print 0 in l
 
 
 if __name__ == '__main__':
