@@ -75,7 +75,8 @@ class LinkedList:
     def removeValue(self,value):
 
         index = self.indexOf(value)
-        self.removeIndex(index)
+        if(index is not -1):
+            self.removeIndex(index)
         #removeIndex decrements the self.length for us...
         #don't need to do it here
 
