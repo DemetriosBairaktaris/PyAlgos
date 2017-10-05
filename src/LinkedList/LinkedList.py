@@ -3,30 +3,37 @@
 class Node:
 
     def __init__(self, value=None,next=None):
+
         self.value = value
         self.next = next
 
     def setValue(self, value):
+
         self.value = value
 
     def setNext(self, nextNode):
+
         self.next = nextNode
 
     def getValue(self):
+
         return self.value
 
     def getNext(self):
+
         return self.next
 
 
 class LinkedList:
 
     def __init__(self):
+
         self.root = None
         self.length = 0
         self.last = None
 
     def __add__(self, value):
+
         newNode = Node(value)
 
         if self.length == 0:
@@ -39,26 +46,46 @@ class LinkedList:
         self.length += 1
 
     def __str__(self):
+
         currentNode = self.root
         l = []
 
         while currentNode is not None:
+
             l.append(currentNode.getValue())
             currentNode = currentNode.getNext()
 
         return str(l)
 
     def __contains__(self, item):
+
         return self.indexOf(item) is not -1
 
     def __len__(self):
+
         return self.length
 
+    def __iter__(self):
+
+        currentNode = self.root
+        while currentNode is not None:
+            yield currentNode.getValue()
+            currentNode = currentNode.getNext()
+
+    def __copy__(self):
+
+        copyList = LinkedList()
+        for value in self:
+            copyList + value
+        return copyList
+
     def pop(self):
+
         self.root = self.root.next
         self.length -= 1
 
     def indexOf(self,value):
+
         index = -1
         counter = 0
         currentNode = self.root
@@ -77,9 +104,6 @@ class LinkedList:
         index = self.indexOf(value)
         if(index is not -1):
             self.removeIndex(index)
-        #removeIndex decrements the self.length for us...
-        #don't need to do it here
-
 
     def _isValidIndex(self,index):
 
@@ -102,19 +126,19 @@ class LinkedList:
         index = self._convertIndex(index)
         if index == 0:
             self.pop()
-            return
+        else:
 
-        previousNode = None
-        currentNode = self.root
-        i = 0
-        while i < index:
-            placeholder = currentNode
-            currentNode = currentNode.getNext()
-            previousNode = placeholder
-            i += 1
+            previousNode = None
+            currentNode = self.root
+            i = 0
+            while i < index:
+                placeholder = currentNode
+                currentNode = currentNode.getNext()
+                previousNode = placeholder
+                i += 1
 
-        previousNode.setNext(currentNode.getNext())
-        self.length -= 1
+            previousNode.setNext(currentNode.getNext())
+            self.length -= 1
 
     def reverseIter(self):
 
@@ -149,6 +173,9 @@ def main():
     print l
     l.reverseIter()
     print l
+    c = l.__copy__()
+    for x in c:
+        print x
 
 
 if __name__ == '__main__':
