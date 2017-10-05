@@ -51,6 +51,9 @@ class LinkedList:
     def __contains__(self, item):
         return self.indexOf(item) is not -1
 
+    def __len__(self):
+        return self.length
+
     def pop(self):
         self.root = self.root.next
         self.length -= 1
@@ -76,13 +79,27 @@ class LinkedList:
         #removeIndex decrements the self.length for us...
         #don't need to do it here
 
+
+    def _isValidIndex(self,index):
+
+        isValid = True
+        if (index >= self.length or index < -self.length):
+            isValid = False
+        return isValid
+
+    def _convertIndex(self,index):
+
+        if self._isValidIndex(index):
+            index = index % self.length
+            index = abs(index)
+        else:
+            raise Exception("Index out of bounds")
+        return index
+
     def removeIndex(self,index):
 
-        if(index >= self.length or index < -self.length):
-            return
-        index = index % self.length
-        index = abs(index)
-        if(index == 0 or index == 3):
+        index = self._convertIndex(index)
+        if index == 0:
             self.pop()
             return
 
@@ -126,11 +143,11 @@ def main():
     for i in range(4):
         l + i
     print l
-    l.reverseRec(currentNode=l.root)
+
+    l.removeIndex(len(l)-1)
     print l
-    l.removeValue(36)
-    l.removeIndex(20)
-    print 0 in l
+    l.reverseIter()
+    print l
 
 
 if __name__ == '__main__':
