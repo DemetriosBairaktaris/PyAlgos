@@ -151,21 +151,25 @@ class LinkedList:
             currentNode = nextNode
         self.root = prevNode
 
-    def reverseRec(self ,prevNode = None, currentNode=None, nextNode = None):
+    def reverseRec(self):
 
-        if currentNode is None:
-            self.root = prevNode
-        else:
-            nextNode = currentNode.getNext()
-            currentNode.setNext(prevNode)
-            prevNode = currentNode
-            currentNode = nextNode
-            self.reverseRec(prevNode, currentNode, nextNode)
+        def reverseHelper(prevNode = None, currentNode = None, nextNode = None):
+
+            if currentNode is None:
+                self.root = prevNode
+            else:
+                nextNode = currentNode.getNext()
+                currentNode.setNext(prevNode)
+                prevNode = currentNode
+                currentNode = nextNode
+                reverseHelper(prevNode,currentNode,nextNode)
+
+        reverseHelper(currentNode=self.root)
 
 def main():
 
     l = LinkedList()
-    for i in range(4):
+    for i in range(50):
         l + i
     print l
 
@@ -173,9 +177,9 @@ def main():
     print l
     l.reverseIter()
     print l
-    c = l.__copy__()
-    for x in c:
-        print x
+    print "reversing {}, in a recursive way".format(l)
+    l.reverseRec()
+    print l
 
 
 if __name__ == '__main__':
