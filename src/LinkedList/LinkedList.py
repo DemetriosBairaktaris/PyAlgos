@@ -1,6 +1,6 @@
 
 
-class Node:
+class Node(object):
 
     def __init__(self, value=None,next=None):
 
@@ -24,7 +24,7 @@ class Node:
         return self.next
 
 
-class LinkedList:
+class LinkedList(object):
 
     def __init__(self):
 
@@ -169,17 +169,18 @@ class LinkedList:
 def main():
 
     l = LinkedList()
-    for i in range(50):
-        l + i
-    print l
+    [l + i for i in range(20)]
+    lReversed = l.__copy__()
+    lReversed.reverseRec()
 
-    l.removeIndex(len(l)-1)
-    print l
-    l.reverseIter()
-    print l
-    print "reversing {}, in a recursive way".format(l)
-    l.reverseRec()
-    print l
+    print l, "\n", lReversed
+    lReversed.reverseIter()
+
+    print lReversed
+
+
+
+
 
 
 if __name__ == '__main__':
