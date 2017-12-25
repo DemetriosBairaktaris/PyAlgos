@@ -1,23 +1,15 @@
 class Graph(object):
-
-
-    def __init__(self,number_of_verticies):
+    def __init__(self, number_of_vertices):
         self.adj_list = None
-        self.___addVerticies(number_of_verticies)
 
-    def ___addVerticies(self, number_of_verticies):
-        self.adj_list = {i: list() for i in range(number_of_verticies + 1)}
+        def add_vertices(number_of_vertices):
+            self.vertices = {v for v in range(number_of_vertices)}
+            self.adj_list = {i: list() for i in self.vertices}
 
-    def addEdge(self, v1, v2):
-        couldAddEdge = False
-        if v1 in self.adj_list and v2 in self.adj_list:
-            self.adj_list[v1].append(v2)
-            self.adj_list[v2].append(v1)
-            couldAddEdge = True
-        return couldAddEdge
+        add_vertices(number_of_vertices)
 
-    def __contains__(self, edgePairTuple):
-        v1, v2 = edgePairTuple[0], edgePairTuple[1]
+    def __contains__(self, edge_pair):
+        v1, v2 = edge_pair[0], edge_pair[1]
         containsEdge = False
         if v1 in self.adj_list and v2 in self.adj_list:
             containsEdge = True if v2 in self.adj_list[v1] else False
@@ -26,27 +18,51 @@ class Graph(object):
     def __str__(self):
         return str(self.adj_list)
 
+    def add_edge(self, v1, v2):
+        couldAddEdge = False
+        if v1 in self.adj_list and v2 in self.adj_list:
+            self.adj_list[v1].append(v2)
+            self.adj_list[v2].append(v1)
+            couldAddEdge = True
+        return couldAddEdge
+
 
 class Search(object):
-    def __init__(self,graph):
+    def __init__(self, graph):
         self.graph = graph
-        self.___marked = []
 
-    def dfs(self):
-        verticies = [v for v in graph]
-        def recurse(v):
-            if v not in self.___marked:
-                self.___marked.append(v)
-                pass #todo finish this
+    def connection(self, vertex1, vertex2):
+        if False in [vertex in self.graph.vertices for vertex in (vertex1, vertex2)]:
+            return False
+        marked = set()
+
+        def dfs(vertex):
+            if vertex not in marked:
+                marked.add(vertex)
+                for adj_vertex in self.graph.adj_list[vertex]:
+                    dfs(adj_vertex)
+
+        dfs(vertex1)
+        return vertex1 in marked and vertex2 in marked
+
+
 def main():
-    g = Graph()
-    g.addVerticies(10)
+    import random
+    number_vertices = 100
+    g = Graph(number_vertices)
     print str(g)
-    g.addEdge(1, 2)
-    g.addEdge(2, 4)
+    edges = []
+    for x in range(200):
+        edge = (random.choice(range(number_vertices)),random.choice(range(number_vertices)))
+        g.add_edge(edge[0],edge[1])
+        edges.append(edge)
     print g
-    print (1, 2) in g
-    print (2, 1) in g
-    print (200, 2) in g
+
+    search = Search(g)
+    for edge in edges:
+        print search.connection(edge[0],edge[1])
+        #should all be true
+
+
 if __name__ == '__main__':
     main()
