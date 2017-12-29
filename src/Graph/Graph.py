@@ -31,8 +31,12 @@ class Search(object):
     def __init__(self, graph):
         self.graph = graph
 
+    def _validate_input(self,vertex1,vertex2):
+        return not False in [vertex in self.graph.vertices for vertex in (vertex1,vertex2)]
+
     def connection(self, vertex1, vertex2):
-        if False in [vertex in self.graph.vertices for vertex in (vertex1, vertex2)]:
+        #dfs implementation (recursive)
+        if not self._validate_input(vertex1,vertex2):
             return False
         marked = set()
 
@@ -44,6 +48,26 @@ class Search(object):
 
         dfs(vertex1)
         return vertex1 in marked and vertex2 in marked
+
+    def connection_1(self,vertex1,vertex2):
+        #BFS implementation
+        isConnection = False
+        if self._validate_input(vertex1,vertex2):
+            vertex_queue = list()
+            marked_set = set()
+            vertex_queue.append(vertex1)
+
+            while len(vertex_queue) > 0:
+                current_vertex = vertex_queue.pop()
+                if current_vertex not in marked_set:
+                    marked_set.add(current_vertex)
+                    if current_vertex is vertex2:
+                        isConnection = True
+                        break
+                    else:
+                        [vertex_queue.append(v) for v in self.graph.adj_list[current_vertex]]
+        return isConnection
+
 
 
 def main():
@@ -61,8 +85,10 @@ def main():
     search = Search(g)
     for edge in edges:
         print search.connection(edge[0],edge[1])
+        print search.connection_1(edge[0],edge[1])
         #should all be true
-
+    #should be false
+    print search.connection_1(2000,200)
 
 if __name__ == '__main__':
     main()
